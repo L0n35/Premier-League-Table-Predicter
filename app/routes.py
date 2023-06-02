@@ -2,15 +2,11 @@ from flask import render_template, jsonify, session, redirect, request, url_for,
 from app import app, db
 from app.forms import LoginForm, CreateForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import user, conversations
+from app.models import users, predictions, seasons
 import json
-import openai
 from sqlalchemy import select
 
-# OpenAI API key
-openai.api_key = ''
-# OpenAI model 
-MODEL_NAME = 'gpt-3.5-turbo'
+currentSeason = 2023
 
 @app.route('/')
 def base():
@@ -26,7 +22,7 @@ def home():
 
     if form.validate_on_submit():
           # Sets current user information
-          currentUser = user.query.filter_by(email=form.email.data).first()
+          currentUser = users.query.filter_by(email=form.email.data).first()
           currentUserID = currentUser.get_id()
           currentUserName = currentUser.get_name()
           session['username'] = currentUserName
@@ -40,99 +36,19 @@ def home():
             #    return redirect(url_for('home'))
           else:
             login_user(currentUser)
-            return redirect(url_for('history'))
+            return redirect(url_for('predict'))
 
     return render_template('home-page.html', form=form)
-
-# Displays a users previous conversations
-@app.route('/history')
-@login_required
-def history():
-      return render_template("history-page.html", name=currentUserName)
-
-# Creates a new conversation
-@app.route('/chat')
-def new_chat():
-      empty_json = {
-        "messages": []
-      }
-      conversation = conversations(title="", conv_json=json.dumps(empty_json), userID=currentUserID)
-      db.session.add(conversation)
-      db.session.commit()
-      global conversationID
-      conversationID = conversation.get_id()
-      return render_template("chat.html", name=currentUserName)
-
-# Loads a previous conversation
-@app.route('/chat/<id>')
-def chat(id):
-      global conversationID
-      conversationID = id
-      return render_template("chat.html", name=currentUserName)
-     
-# Gets ChatGPT response to users message
-@app.route('/get_response', methods=['POST'])
-def get_response():
-    # Get location and message input from chat page
-    location = request.form['location']
-    message = request.form['message']
-
-    # Prepare the conversation input
-    conversation = [
-        {'role': 'system', 'content': 'You are a helpful assistant who helps users with travel related questions about ' + location + ' only.'},
-        {'role': 'user', 'content': 'In 50 words or less answer the question: ' + message}
-    ]
-
-    # Generate TravelBots's response using stream
-    response = openai.ChatCompletion.create(
-        model=MODEL_NAME,
-        messages=conversation,
-        max_tokens=200,
-        n=1,
-        stop=None
-    )
-    reply = response.choices[0].message.content
-
-    # Get the conversations previous messages 
-    conversationQuery = conversations.query.filter_by(conversationID=conversationID).first()
-    conversationJSON = conversationQuery.get_json()
-    conversationMessages = json.loads(conversationJSON)
-
-    # Add new message and reply to previous ones
-    conversationMessages["messages"].append({"author": current_user.name, "message": message})
-    conversationMessages["messages"].append({"author": "TravelBot", "message": reply})
-
-    # Update changes in database
-    conv = conversations.query.filter_by(conversationID=conversationID).first()
-    conv.set_title(location)
-    conv.set_json(json.dumps(conversationMessages))
-    db.session.commit()
-    
-    return reply
-
-# Gets conversations for the history page
-@app.route('/get_conversations', methods=['POST'])
-def get_conversations():
-    convs = conversations.query.filter_by(userID=currentUserID).all()
-    return str(convs)
-
-# Gets messages for chat page when loading a previous conversation 
-@app.route('/get_messages/<id>', methods=['POST'])
-def get_messages(id):
-    messages = conversations.query.filter_by(conversationID=id).first()
-    messagesJSON = messages.get_json()
-    title = messages.get_title()
-    return [title, str(messagesJSON)]
 
 @app.route('/create', methods = ['GET','POST'])
 def create():
     if current_user.is_authenticated:
-        return redirect(url_for('history'))
+        return redirect(url_for('predict'))
     
     form = CreateForm()
 
     if form.validate_on_submit():
-         currentUser = user(name=form.name.data, email=form.email.data)
+         currentUser = users(userName=form.userName.data, fullName=form.fullName.data, email=form.email.data)
          currentUser.set_password(form.password.data)
          db.session.add(currentUser)
          db.session.commit()
@@ -156,7 +72,7 @@ def login():
 
     if form.validate_on_submit():
           # Sets current user information
-          currentUser = user.query.filter_by(email=form.email.data).first()
+          currentUser = users.query.filter_by(email=form.email.data).first()
           currentUserID = currentUser.get_id()
           currentUserName = currentUser.get_name()
           session['username'] = currentUserName
@@ -168,7 +84,7 @@ def login():
                flash('password is incorrect')
                return redirect(url_for('login'))
           login_user(currentUser)
-          return redirect(url_for('history'))
+          return redirect(url_for('index'))
     else:
         flash("unsuccessful")
     return render_template('login.html', form=form)    
@@ -183,3 +99,109 @@ def logout():
 def test():
     form = LoginForm()
     return render_template('base.html', form=form)
+
+@app.route('/predict')
+def predict():
+    return render_template('index.html')
+
+@app.route('/submit_prediction', methods=['POST'])
+def submit_prediction():
+    prediction = request.form['prediction']
+    predictionData = predictions(prediction=prediction, season=currentSeason, userID=currentUserID)
+    db.session.add(predictionData)
+    db.session.commit()
+    print(prediction)
+    return redirect(url_for('home'))
+
+@app.route('/points')
+def points():
+    return render_template('points.html')
+
+
+
+@app.route('/get_prediction', methods=['POST','GET'])
+def get_prediction():
+    prediction = predictions.query.filter_by(userID=currentUserID, season=currentSeason).first()
+    predictionRAA = prediction.get_prediction()
+    # prediction1 = json.loads(predictionJSON)
+    print('gp',predictionRAA)
+    return predictionRAA
+
+@app.route('/points/<id>', methods=['POST','GET'])
+def view_points(id):
+    print('heya',id)
+    prediction = predictions.query.filter_by(predictionID=id).first()
+    u = prediction.get_userName();
+    return render_template('view_points.html', viewingUser=u)
+
+@app.route('/view_prediction/<id>', methods=['POST','GET'])
+def view_prediction(id):
+    print(id)
+    prediction = predictions.query.filter_by(predictionID=id).first()
+    predictionRAA = prediction.get_prediction()
+    return predictionRAA
+
+@app.route('/get_teams', methods=['POST','GET'])
+def get_teams():
+    season = seasons.query.first()
+    teams = season.get_teams()
+    teams = teams.replace('[','')
+    teams = teams.replace(']','')
+    teamList2 = teams.split(",")
+    teamList2.sort()
+    print('gt',teamList2)
+    return teamList2
+
+@app.route('/get_standings', methods=['POST','GET'])
+def get_standings():
+    s = seasons.query.first()
+    t = s.get_teams()
+    t = t.replace('[','')
+    t = t.replace(']','')
+    print('gs',t)
+    return t
+
+@app.route('/update_points', methods=['POST','GET'])
+def update_points():
+    points = request.form['points']
+
+
+
+    # Get the conversations previous messages 
+    predictionData = predictions.query.filter_by(userID=currentUserID, season=currentSeason).first()
+
+
+    # Update changes in database
+    predictionData = predictions.query.filter_by(userID=currentUserID, season=currentSeason).first()
+    predictionData.set_points(points)
+
+    db.session.commit()
+
+    print(points)
+    return '!SCORE UPDATED!'
+
+@app.route('/rank')
+def rank():
+    return render_template('rank.html')
+
+@app.route('/get_leaderboard', methods=['POST','GET'])
+def get_leaderboard():
+    all = []
+    allPredictions = predictions.query.filter_by(season=currentSeason).all()
+    for x in allPredictions:
+        all.append(x.get_array())
+        print(x.get_array())
+
+    print(Sort(all))
+    return Sort(all)
+
+def Sort(sub_li):
+ 
+    # reverse = None (Sorts in Ascending order)
+    # key is set to sort using second element of
+    # sublist lambda has been used
+    return(sorted(sub_li, key=lambda x: x[3],reverse=True))
+
+@app.route('/dash')
+def dash():
+    return render_template('dashboard.html')

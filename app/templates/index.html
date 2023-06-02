@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Predict</title>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Premier League Font -->
+  <link href="https://fonts.cdnfonts.com/css/premier-league" rel="stylesheet">
+
+  <style>
+    body {
+        font-family: 'Premier League', sans-serif;
+    }
+
+    .logo-size {
+        height: 60px;
+        width: 60px;
+    }
+    .handle {
+      cursor: move;
+    }
+    table.position {
+        width: 75px;
+        height: 75px;
+    }
+    table.team {
+        height: 75px;
+        width: 400px;
+    }
+    td {
+        padding: 20px;
+        height: 75px;
+    }
+    .position {
+        margin-right: 10px;
+        text-align: center; /* Horizontally center the text */
+        /* line-height: 10vh;  */
+    }
+
+    .table {
+        width: 0px;
+    }
+
+    .table td {
+        padding: 20px;
+    }
+
+    .normal {
+        border-radius: 10px;
+        background-color: lightgray;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .champions-league {
+        border-radius: 10px;
+        background-color:#8FC93A;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .europa-league {
+        background-color: #8884FF;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .europa-conference-league {
+        background-color: #018E42;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .relegation {
+        background-color: #F45050;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    tbody.position {
+        padding: 20px;
+        font-size: x-large;
+    }
+    tbody.position td {
+        padding: 0px;
+    }
+    
+    /* tbody.team td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    tbody.team td:last-child {
+        border-radius: 0 10px 10px 0;
+    } */
+   
+
+    .team-row {
+        height: 75px;
+        padding: 0px;
+        
+    }
+
+    .team-border {
+        /* border: 2px solid black; */
+        border-radius: 10px;
+    }
+
+    .ui-sortable-helper {
+        border: 0px;
+    }
+
+    /* Media Queries */
+    /* @media (max-width: 768px) {
+      .team {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .team {
+        width: 100%;
+      }
+    } */
+  </style>
+</head>
+
+<body style="background-color: #222831; color:white;">
+  <div class="container mt-3" style="margin: auto; width: 1200px;">
+    <h5 class="mb-3" style="text-align: center;">Predict where you think teams will finish this season</h5>
+
+    <div style="display:flex; margin: auto; width:360px;">
+        <table class=" position">
+            <thead>
+                <tr>
+                    <!-- <th>Position</th> -->
+                </tr>
+            </thead>
+            <tbody class="position">
+                <tr><td><div class="champions-league">1</div></td></tr>
+                <tr><td><div class="champions-league">2</div></td></tr>
+                <tr><td><div class="champions-league">3</div></td></tr>
+                <tr><td><div class="champions-league">4</div></td></tr>
+                <tr><td><div class="europa-league">5</div></td></tr>
+                <tr><td><div class="europa-league">6</div></td></tr>
+                <tr><td><div class="normal">7</div></td></tr>
+                <tr><td><div class="normal">8</div></td></tr>
+                <tr><td><div class="normal">9</div></td></tr>
+                <tr><td><div class="normal">10</div></td></tr>
+                <tr><td><div class="normal">11</div></td></tr>
+                <tr><td><div class="normal">12</div></td></tr>
+                <tr><td><div class="normal">13</div></td></tr>
+                <tr><td><div class="normal">14</div></td></tr>
+                <tr><td><div class="normal">15</div></td></tr>
+                <tr><td><div class="normal">16</div></td></tr>
+                <tr><td><div class="normal">17</div></td></tr>
+                <tr><td><div class="relegation">18</div></td></tr>
+                <tr><td><div class="relegation">19</div></td></tr>
+                <tr><td><div class="relegation">20</div></td></tr>
+            </tbody>
+        </table>
+        <table class=" team">
+            <thead>
+            
+            </thead>
+            <tbody id="sortable">
+            </tbody>
+        </table>
+    </div>
+    <div style="display:flex; margin: auto; width:360px;">
+      <button onclick="window.location.href='/points';" id="submit-prediction" class="btn btn-submit" style="width:360px; height:75px; margin-bottom: 10px; background-color: white; cursor: pointer; border-radius: 10px;">Submit</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script>
+
+  function getLogo(team) {
+    return "../static/images/team_logos/" + team + ".png";
+  }
+  
+
+  var sortedData = [];
+
+    $(function () {
+
+      fetch('/get_teams', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          }
+      })
+      .then(response => response.text())
+      .then(reply => {
+          console.log(reply);
+          var teams = JSON.parse(reply);
+          teams.forEach(function (team) {
+            var logo = getLogo(team);
+            var row = '<tr class="handle">' + '<td class="team-row">' +
+              '<div class="handle team-border" style="display: flex; height: 75px; margin-bottom:10px; width: 275px; background-color: #393E46;">' +
+              '<image class="logo-size" style="margin: 5px 10px 5px 10px; object-fit: cover;" src="' + logo + '"></image>' +
+              '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
+              '</tr>';
+
+            $("#sortable").append(row);
+          });
+
+          $("#sortable").sortable({
+            handle: ".handle",
+            update: function (event, ui) {
+              sortedData = [];
+              $(this).children().each(function () {
+                var teamName = $(this).find('.handle').text().trim();
+                sortedData.push(teamName);
+              });
+              console.log('hi');
+              console.log(sortedData);
+            }
+          });
+
+      });
+
+
+
+
+
+
+
+      // $.ajax({
+      //   url: "https://api-football-v1.p.rapidapi.com/v3/teams?league=39&season=2022",
+      //   type: "GET",
+      //   headers: {
+      //     "X-RapidAPI-Key": "8cdb83a6cfmsh49a84904cbd4025p1c2489jsn1fd7df32468d"
+      //   },
+      //   success: function (response) {
+      //     var teams = response.response;
+      //     console.log(teams);
+      //     teams.forEach(function (team) {
+      //       var row = '<tr class="handle">' + '<td class="team-row">' +
+      //         '<div class="handle team-border" style="display: flex; height: 75px; margin-bottom:10px; width: 275px; background-color: #393E46;">' +
+      //         '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + team.team.logo + '"></image>' +
+      //         '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team.team.name + '</p>'  +'</div>' + '</td>'
+      //         '</tr>';
+
+      //       $("#sortable").append(row);
+      //     });
+
+      //     $("#sortable").sortable({
+      //       handle: ".handle",
+      //       update: function (event, ui) {
+      //         sortedData = [];
+      //         $(this).children().each(function () {
+      //           var teamName = $(this).find('.handle').text().trim();
+      //           sortedData.push(teamName);
+      //         });
+      //         console.log('hi');
+      //         console.log(sortedData);
+      //       }
+      //     });
+      //   },
+      //   error: function (xhr, status, error) {
+      //     console.error(error);
+      //   }
+      // });
+    });
+
+    var submitPredictionButton = document.getElementById("submit-prediction");
+    submitPredictionButton.addEventListener("click", function() {
+      submitPrediction(sortedData)
+    });
+
+    function submitPrediction(prediction) {
+      console.log(prediction);
+
+      fetch('/submit_prediction', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `prediction=${encodeURIComponent(prediction)}`
+      })
+      .then(response => response.text())
+      .then(reply => {
+          console.log(reply);
+      });
+    }
+  </script>
+</body>
+
+</html>
+
+{% endblock %}

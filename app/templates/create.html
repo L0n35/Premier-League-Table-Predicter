@@ -75,9 +75,16 @@
                 {% endfor %}
             </p>
             <p>
-                {{ form.name.label }}<br>
-                {{ form.name(size=70) }}
-                {% for error in form.name.errors %}
+                {{ form.userName.label }}<br>
+                {{ form.userName(size=70) }}
+                {% for error in form.userName.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.fullName.label }}<br>
+                {{ form.fullName(size=70) }}
+                {% for error in form.fullName.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>

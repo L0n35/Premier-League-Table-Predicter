@@ -1,0 +1,488 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Points</title>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+  <script src="https://kit.fontawesome.com/66b4756049.js" crossorigin="anonymous"></script>
+
+  <!-- Premier League Font -->
+  <link href="https://fonts.cdnfonts.com/css/premier-league" rel="stylesheet">
+
+  <style>
+    body {
+        font-family: 'Premier League', sans-serif;
+    }
+
+    .logo-size {
+        height: 60px;
+        width: 60px;
+    }
+
+    table.position {
+        width: 75px;
+        height: 75px;
+    }
+    /* table.team {
+        height: 75px;
+        width: 400px;
+    } */
+    td {
+        /* padding: 20px; */
+        height: 75px;
+    }
+    .position {
+        margin-right: 10px;
+        text-align: center; /* Horizontally center the text */
+        /* line-height: 10vh;  */
+    }
+
+    .table {
+        width: 0px;
+    }
+
+    .table td {
+        padding: 20px;
+    }
+
+    .normal {
+        border-radius: 10px;
+        background-color: lightgray;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .champions-league {
+        border-radius: 10px;
+        background-color:#8FC93A;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .europa-league {
+        background-color: #8884FF;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .europa-conference-league {
+        background-color: #018E42;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .relegation {
+        background-color: #F45050;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .standard {
+        background-color: #3C486B;
+        border-radius: 10px;
+        height: 75px;
+        width: 75px;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    tbody.position {
+        padding: 20px;
+        font-size: x-large;
+    }
+    tbody.position td {
+        padding: 0px;
+    }
+    
+    /* tbody.team td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    tbody.team td:last-child {
+        border-radius: 0 10px 10px 0;
+    } */
+   
+
+    .team-row {
+        height: 75px;
+        padding: 0px;
+        
+    }
+
+    .team-border {
+        /* border: 2px solid black; */
+        border-radius: 10px;
+    }
+
+    .ui-sortable-helper {
+        border: 0px;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .team {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .team {
+        width: 100%;
+      }
+    }
+
+    .team-div-style {
+        display: block;
+        width: 275px;
+    }
+    .table-header {
+        display: flex; 
+        width: 850px;
+    }
+    .table-header-col {
+        margin-right: 10px; 
+        text-align: center;
+    }
+    .col-normal {
+        width: 75px;
+    }
+    .col-wide {
+        width: 275px;
+    }
+
+    @media (max-width: 550px) {
+        .team-div-style {
+            width: 75px;
+        }
+        .team-div-style p {
+            display: none;
+        }
+        .table-header {
+            display: flex; 
+            width: 340px;
+        }
+        .col-wide{
+            width: 75px;
+        }   
+    }
+    
+
+    
+  </style>
+</head>
+
+<body style="background-color: #222831; color:white;">
+  <div class="container mt-3" style="margin: auto; width: 1000px;">
+    <h5 id="viewingUser" class="mb-3" style="text-align: center;">Viewing User: {{viewingUser}}</h5>
+    <h5 id="title" class="mb-3" style="text-align: center;">Points Page</h5>
+    <div style="margin: auto; width: 820px;">
+    <div class="table-header">
+        <div class="table-header-col col-normal">Points</div>
+        <div class="table-header-col col-wide">Prediction</div>
+        <div class="table-header-col col-normal">Offset</div>
+        <div class="table-header-col col-wide">Standings</div>
+        <div class="table-header-col col-normal">Position</div>
+    </div>
+    <div style="display:flex">
+        <!-- <table class=" position">
+            <thead>
+            </thead>
+            <tbody class="position">
+                <tr><td><div class="champions-league">1</div></td></tr>
+                <tr><td><div class="champions-league">2</div></td></tr>
+                <tr><td><div class="champions-league">3</div></td></tr>
+                <tr><td><div class="champions-league">4</div></td></tr>
+                <tr><td><div class="europa-league">5</div></td></tr>
+                <tr><td><div class="europa-league">6</div></td></tr>
+                <tr><td><div class="normal">7</div></td></tr>
+                <tr><td><div class="normal">8</div></td></tr>
+                <tr><td><div class="normal">9</div></td></tr>
+                <tr><td><div class="normal">10</div></td></tr>
+                <tr><td><div class="normal">11</div></td></tr>
+                <tr><td><div class="normal">12</div></td></tr>
+                <tr><td><div class="normal">13</div></td></tr>
+                <tr><td><div class="normal">14</div></td></tr>
+                <tr><td><div class="normal">15</div></td></tr>
+                <tr><td><div class="normal">16</div></td></tr>
+                <tr><td><div class="normal">17</div></td></tr>
+                <tr><td><div class="relegation">18</div></td></tr>
+                <tr><td><div class="relegation">19</div></td></tr>
+                <tr><td><div class="relegation">20</div></td></tr>
+            </tbody>
+        </table> -->
+        
+        <table id="points">
+            <thead>
+                <!-- <tr><td>Offset</td></tr> -->
+            </thead>
+            <tbody class="position">
+        
+            </tbody>
+        </table>
+        <table class="prediction2" style="margin-right: 10px">
+            <thead>
+                <!-- <tr><td>Standings</td></tr> -->
+            </thead>
+            <tbody id="prediction2">
+            </tbody>
+        </table>
+        <table class="prediction" style="margin-right: 10px">
+            <thead>
+                <!-- <tr><td>Standings</td></tr> -->
+            </thead>
+            <tbody id="prediction">
+            </tbody>
+        </table>
+        <table class="standings" style="margin-right: 10px">
+            <thead>
+                <!-- <tr><td>Standings</td></tr> -->
+            </thead>
+            <tbody id="hello">
+            </tbody>
+        </table>
+        <table id="position">
+            <thead>
+            </thead>
+            <tbody class="position">
+        
+            </tbody>
+        </table>
+        
+        
+        
+        
+        <!-- <table id="offset">
+            <thead>
+            </thead>
+            <tbody class="position">
+        
+            </tbody>
+        </table>
+        <table class="team" style="margin-right: 10px">
+            <thead>
+            </thead>
+            <tbody id="sortable">
+            </tbody>
+        </table> -->
+        
+    </div>
+    </div>  
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script>
+
+  var sortedData = [];
+  predictionList = [];
+  predictionList = ["Manchester City","Liverpool","Chelsea","Manchester United","Arsenal","Newcastle","Tottenham","Aston Villa","Brentford","Crystal Palace","Fulham","Brighton","Leicester","West Ham","Nottingham Forest","Leeds","Everton","Bournemouth","Southampton","Wolves"];
+
+    jeff = window.location.pathname;
+    id = jeff.split("/")[2];
+    console.log('jeff',id);
+
+    
+    fetch('/view_prediction/' + id , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    })
+    .then(response => response.text())
+    .then(reply => {
+        console.log(reply);
+
+        user_prediction = reply.split(",");
+        predictionList = user_prediction;
+        console.log('baaa',user_prediction);
+
+        predictionList.forEach(function (team) {
+            var logo = getLogo(team);
+            var row = '<tr class="handle">' + '<td class="team-row">' +
+                '<div class="handle team-border" style="display: flex; height: 75px; margin-bottom:10px; width: 275px; background-color: #393E46;">' +
+                '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
+                '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
+                '</tr>';
+
+            $("#prediction2").append(row);
+        });
+    });
+    
+    fetch('/get_standings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    })
+    .then(response => response.text())
+    .then(reply => {
+        standings = reply.split(",");
+        standingsList = standings;
+        console.log('standos',standings);
+
+        standingsList.forEach(function (team) {
+            var logo = getLogo(team);
+            var row = '<tr class="handle">' + '<td class="team-row">' +
+                '<div class="handle team-border" style="display: flex; height: 75px; margin-bottom:10px; width: 275px; background-color: #393E46;">' +
+                '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
+                '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
+                '</tr>';
+
+            $("#hello").append(row);
+        });
+    });
+
+    function getLogo(team) {
+        return "../static/images/team_logos/" + team + ".png";
+    }
+    
+    setTimeout(() => {
+    $(function () { 
+            
+            standingList = [];
+            $("#hello").children().each(function () {
+                var teamName = $(this).find('.handle').text().trim();
+                standingList.push(teamName);
+            });
+            $("#sortable").children().each(function () {
+                var teamName = $(this).find('.handle').text().trim();
+                predictionList.push(teamName);
+            });
+
+            offsetList = [];
+            pointsList = [];
+            indexList = [];
+            var points = 0;
+
+            for (let i=0; i<20; i++) {
+                console.log('indoxList: ',indexList);
+                for (let x=0; x<20; x++) {
+                    console.log(i,standingList[i],x,predictionList[x],x-i)
+                    if (standingList[x] == predictionList[i]) {
+                        offsetList.push(i-x);
+                        indexList.push(x);
+                        if (Math.abs(i-x) == 0) {
+                            pointsList.push(5);
+                            points += 5;
+                        } else if (Math.abs(i-x) == 1) {
+                            pointsList.push(4);
+                            points += 4;
+                        } else if (Math.abs(i-x) == 2) {
+                            pointsList.push(3);
+                            points += 3;
+                        } else if (Math.abs(i-x) == 3) {
+                            pointsList.push(2);
+                            points += 2;
+                        } else if (Math.abs(i-x) == 4) {
+                            pointsList.push(1);
+                            points += 1;
+                        } else {
+                            pointsList.push(0);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            const pointsTitle = document.getElementById('title');
+            pointsTitle.innerHTML = 'Total Points: ' + points;
+
+            console.log("standingList: ",standingList);
+            console.log("predictionList: ",predictionList);
+            console.log("offsetList: ",offsetList);
+            console.log("pointsList: ",pointsList);
+            console.log("indexList: ",indexList);
+
+            const predictionTable = document.getElementById('prediction');
+            
+            for (let i = 0; i < indexList.length; i++) {
+                const row = predictionTable.insertRow();
+                const cell = row.insertCell();
+
+                borderColour = "";
+                console.log(Math.abs(offsetList[i]));
+                if (Math.abs(offsetList[i]) == 1) {
+                    borderColour = "orange";
+                    console.log(borderColour);
+                } else {
+                    borderColour = "red";
+                }
+                
+                if (offsetList[i] > 0) {
+                    cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px 0px 15px 0px; text-align: center; font-size: x-large; border: 5px solid ' + '#393E46' + ';">' + 
+                    // (indexList[i] + 1) + 
+                    '<span class="fa fa-solid fa-arrow-up" style="font-size: x-large; margin-right: 10px;"></span>' +
+                    Math.abs(offsetList[i]) +
+                    '</div>';
+                } else if (offsetList[i] < 0) {
+                    cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px 0px 15px 0px; text-align: center; font-size: x-large; border: 5px solid ' + '#393E46' + ';">' + 
+                    // (indexList[i] + 1) + 
+                    '<span class="fa fa-solid fa-arrow-down" style="font-size: x-large; margin-right: 10px;"></span>' +
+                    Math.abs(offsetList[i]) +
+                    '</div>';
+                } else {
+                    cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px; text-align: center; font-size: x-large; border: 5px solid #393E46;">' + 
+                    '<span class="fa fa-solid fa-equals" style="font-size: x-large;"></span>' +
+                    '</div>';
+
+                }
+            
+            }
+
+            // const offsetTable = document.getElementById('offset');
+            
+            // for (let i = 0; i < offsetList.length; i++) {
+            //     const row = offsetTable.insertRow();
+            //     const cell = row.insertCell();
+            //     cell.innerHTML = '<div class="standard" style="margin-right:10px;">' + offsetList[i] + '</div>';
+            // }
+
+            const pointsTable = document.getElementById('points');
+            
+            for (let i = 0; i < pointsList.length; i++) {
+                const row = pointsTable.insertRow();
+                const cell = row.insertCell();
+                if (pointsList[i] > 0) {
+                    cell.innerHTML = '<div class="standard" style="background-color: white; color: black; margin-right: 10px;">' + pointsList[i] + '</div>';
+                } else {
+                    cell.innerHTML = '<div class="standard" style="background-color: black; margin-right: 10px;">' + '-' + '</div>';
+                }
+            }
+
+            const positionTable = document.getElementById('position');
+            
+            for (let i = 1; i <= 20; i++) {
+                const row = positionTable.insertRow();
+                const cell = row.insertCell();
+                cell.innerHTML = '<div class="standard" style="background-color: white; color: black; margin-right: 10px;">' + i + '</div>';
+            }
+        
+
+
+
+
+    });
+    }, 100);
+
+  </script>
+</body>
+
+</html>
+
+{% endblock %}
