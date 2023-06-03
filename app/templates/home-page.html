@@ -33,6 +33,10 @@
     <title>Home</title>
 
     <style>
+
+        body {
+            font-family: 'Premier League', sans-serif;
+        }
         /* Style the navigation menu */
         .topnav {
         overflow: hidden;
@@ -77,20 +81,162 @@
         .nav-style {
             background-color:#3C486B;
         }
+        .modal-header, h4, .close {
+            background-color: #5a7ce2;
+            color:white !important;
+            text-align: center;
+            font-size: 30px;
+        }
+        .modal-footer {
+            background-color: #f9f9f9;
+        }
+        @media (max-width: 768px) {
+        .nav-style {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .col-10,
+        .col-2 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        }
+        .respo {
+            width:1000px; 
+            margin:auto;
+        }
+        @media (max-width: 1000px) {
+            .respo {
+                width: 100%;
+            }
+        }
+        .item2 {
+            width: 150px;
+        }
+        .item4 {
+            width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .respo {
+                width: 100%;
+            }
+            .item2 {
+                display: none;
+            }
+            .item4 {
+                display: none;
+            }
+            .item2 {
+                width: 10px;
+            }
+            .item4 {
+                width: 10px;
+            }
+        }
+        body {
+            background-color: #222831;
+        }
+
+        .item1 { grid-area: header; }
+        .item2 { grid-area: left; }
+        .item3 { grid-area: main; }
+        .item4 { grid-area: right; }
+        .item5 { grid-area: footer; }
+
+
+        .grid-container {
+        display: grid;
+        grid-template-areas:
+            'header header header header header'
+            'left main main main right'
+            'left main main main right'
+            'footer footer footer footer footer';
+        gap: 10px;
+        background-color: transparent;
+        /* padding: 10px; */
+        }
+
+        .grid-container > div {
+        background-color: #3C486B;
+        text-align: center;
+        padding: 20px 0;
+        font-size: 30px;
+        color:white;
+        border-radius: 10px;
+        }
+
     </style>
     </head>
     
-    <body>
-        <div class="" style="margin: auto; width: 1000px;">
+    <body >
+            {% if current_user.is_authenticated %}
+            {% else %}
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog" style="margin-top: 75px;">
+                <!-- Modal content-->
+                <div class="modal-content" style="border-radius: 10px; border:0px;">
+                  <div class="modal-header" style="padding:35px 50px;">
+                    <h4><span class="glyphicon glyphicon-lock"></span> Login</h4>
+                    <button type="button" class="close" data-dismiss="modal" style="margin: 0px; padding: 0px;">&times;</button>
+
+                  </div>
+                  <div class="modal-body">
+                    <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <label for="email"><span class="glyphicon glyphicon-user"></span>{{ form.email.label }}<br></label>
+                            {{ form.email(type_='text',class='form-control',id_='usrname',placeholder_='Enter email',size=70) }}
+                        </div>
+                        {% for error in form.email.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <div class="form-group">
+                            <label for="password"><span class="glyphicon glyphicon-user"></span>{{ form.password.label }}<br></label>
+                            {{ form.password(type_='text',class='form-control',id_='password',placeholder_='Enter password',size=70) }}
+                        </div>
+                        {% for error in form.password.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        {{ form.submit(type_="submit", class_="btn btn-block", style_="background-color: #5a7ce2; color: white;")}}
+                    </form>
+                  </div>
+                  <div class="modal-footer" style="display: flex; justify-content: space-between;">
+                    <!-- <div class="text-left">
+                        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                    </div> -->
+                    <div class="text-right">
+                        <div>Not a member? <a href="#">Sign Up</a></div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div> 
+          </div>
+          {% endif %}
+           
+          <script>
+          $(document).ready(function(){
+            $("#loginDropdown").click(function(){
+              $("#myModal").modal();
+            });
+          });
+          </script>
+
+
+
+
+        <div class="">
         <!-- NAVBAR + LOGIN DROP DOWN-->
-        <div class="nav-style navbar" style="display: flex;">
-            <div class="col-10 text-left" style="display: flex;">
-                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                    <i class="fa fa-bars" style="font-size: xx-large; margin-top: 8px;"></i>
-                </a>
-                <h1 style="margin-left: 40px;">1337 Sports</h1>
+        <div class="nav-style navbar respo" style="display: flex;">
+            <div class="text-left" style="display: flex;">
+                <h1 style="color: white;">1337 Sports</h1>
             </div>
-            <div class="col-2 text-right">
+            <div class="text-right">
                 {% if current_user.is_authenticated %}
                     <div class="dropdown">
                         <a class="btn btn-primary btn-radius dropdown-toggle" href="#" role="button" id="loginDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -108,28 +254,7 @@
                     <a class="btn btn-primary btn-radius dropdown-toggle" href="#" role="button" id="loginDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Login
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginDropdown">
-                            <form action="" method="post" novalidate>
-                                {{ form.hidden_tag() }}
-                                <p>
-                                    {{ form.email.label }}<br>
-                                    {{ form.email(size=70) }}
-                                    {% for error in form.email.errors %}
-                                        <span style="color: red;">[{{ error }}]</span>
-                                    {% endfor %}
-                                </p>
-                                <p>
-                                    {{ form.password.label }}<br>
-                                    {{ form.password(size=70) }}
-                                    {% for error in form.password.errors %}
-                                        <span style="color: red;">[{{ error }}]</span>
-                                    {% endfor %}
-                                </p>
-                                <p>{{ form.submit() }}</p>
-                            </form>
-                            <p>Don't have an account? <a href="{{ url_for('create') }}">Click to Register!</a></p>
-                        <div class="dropdown-divider"></div>
-                    </div>
+                    
                 </div>
                 {% endif %}
             </div>
@@ -147,16 +272,28 @@
         
 
         <!-- ABOUT SECTION -->
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h2>About</h2>
-                    <p>Predict how the premier league table will finish this season! </p>
-                    <p>Play against your freinds</p>
+        
+        </div>
+        <div class=" respo" style="margin-top: 10px;">
+            
+            <div class="grid-container">
+                <div class="item1">leetsports!</div>
+                <div class="item2">AD</div>
+                <div class="item3" style="padding: 0px 0px">
+                    <div style="margin:10px 0px; text-align: left;; font-family:Verdana, Geneva, Tahoma, sans-serif">
+                        <p style="color:#5a7ce2">Make predictions about the upcoming premier league season and play against your friends!</p>
+                        <p style="font-size: 20px">Choose:</p>
+                        <p style="font-size: 20px">How you think the table will finish</p>
+                        <p style="font-size: 20px">Who will win the golden boot</p>
+                        <p style="font-size: 20px">And much much more!</p>
+                        <p style="font-size: 20px">Sign Up to start playing today!</p>
 
-                </div>
+                    </div>
+                </div>  
+                <div class="item4">AD</div>
+                <div class="item5">Made by L0n35 2023</div>
             </div>
         </div>
-        </div>
+            
     </body>
 </html>
