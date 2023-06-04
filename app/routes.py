@@ -110,7 +110,7 @@ def submit_prediction():
     predictionData = predictions(prediction=prediction, season=currentSeason, userID=currentUserID)
     db.session.add(predictionData)
     db.session.commit()
-    print(prediction)
+    print('pred',prediction)
     return redirect(url_for('home'))
 
 @app.route('/points')
