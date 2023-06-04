@@ -157,6 +157,7 @@
     .table-header {
         display: flex; 
         width: 850px;
+        font-size: 10px;
     }
     .table-header-col {
         margin-right: 10px; 
@@ -167,6 +168,9 @@
     }
     .col-wide {
         width: 275px;
+    }
+    .hhheader {
+        margin-right: 10px;
     }
 
     @media (max-width: 550px) {
@@ -183,7 +187,25 @@
         .col-wide{
             width: 75px;
         }   
+        .pos {
+            display: none;
+        }
+        .hhheader {
+            margin-right: 0px;
+        }
+        
     }
+    .respo {
+            width:1000px; 
+            margin:auto;
+            gap: 0px;
+        }
+    @media (max-width: 1000px) {
+        .respo {
+            width: 100%;
+        }
+    }
+    
     
 
     
@@ -191,99 +213,100 @@
 </head>
 
 <body style="background-color: #222831; color:white;">
-  <div class="container mt-3" style="margin: auto; width: 1000px;">
-    <h5 id="title" class="mb-3" style="text-align: center;">Points Page</h5>
-    <div style="margin: auto; width: 820px;">
-    <div class="table-header">
-        <div class="table-header-col col-normal">Points</div>
-        <div class="table-header-col col-wide">Prediction</div>
-        <div class="table-header-col col-normal">Offset</div>
-        <div class="table-header-col col-wide">Standings</div>
-        <div class="table-header-col col-normal">Position</div>
-    </div>
-    <div style="display:flex">
-        <!-- <table class=" position">
-            <thead>
-            </thead>
-            <tbody class="position">
-                <tr><td><div class="champions-league">1</div></td></tr>
-                <tr><td><div class="champions-league">2</div></td></tr>
-                <tr><td><div class="champions-league">3</div></td></tr>
-                <tr><td><div class="champions-league">4</div></td></tr>
-                <tr><td><div class="europa-league">5</div></td></tr>
-                <tr><td><div class="europa-league">6</div></td></tr>
-                <tr><td><div class="normal">7</div></td></tr>
-                <tr><td><div class="normal">8</div></td></tr>
-                <tr><td><div class="normal">9</div></td></tr>
-                <tr><td><div class="normal">10</div></td></tr>
-                <tr><td><div class="normal">11</div></td></tr>
-                <tr><td><div class="normal">12</div></td></tr>
-                <tr><td><div class="normal">13</div></td></tr>
-                <tr><td><div class="normal">14</div></td></tr>
-                <tr><td><div class="normal">15</div></td></tr>
-                <tr><td><div class="normal">16</div></td></tr>
-                <tr><td><div class="normal">17</div></td></tr>
-                <tr><td><div class="relegation">18</div></td></tr>
-                <tr><td><div class="relegation">19</div></td></tr>
-                <tr><td><div class="relegation">20</div></td></tr>
-            </tbody>
-        </table> -->
-        
-        <table id="points">
-            <thead>
-                <!-- <tr><td>Offset</td></tr> -->
-            </thead>
-            <tbody class="position">
-        
-            </tbody>
-        </table>
-        <table class="prediction2" style="margin-right: 10px">
-            <thead>
-                <!-- <tr><td>Standings</td></tr> -->
-            </thead>
-            <tbody id="prediction2">
-            </tbody>
-        </table>
-        <table class="prediction" style="margin-right: 10px">
-            <thead>
-                <!-- <tr><td>Standings</td></tr> -->
-            </thead>
-            <tbody id="prediction">
-            </tbody>
-        </table>
-        <table class="standings" style="margin-right: 10px">
-            <thead>
-                <!-- <tr><td>Standings</td></tr> -->
-            </thead>
-            <tbody id="hello">
-            </tbody>
-        </table>
-        <table id="position">
-            <thead>
-            </thead>
-            <tbody class="position">
-        
-            </tbody>
-        </table>
-        
-        
-        
-        
-        <!-- <table id="offset">
-            <thead>
-            </thead>
-            <tbody class="position">
-        
-            </tbody>
-        </table>
-        <table class="team" style="margin-right: 10px">
-            <thead>
-            </thead>
-            <tbody id="sortable">
-            </tbody>
-        </table> -->
-        
-    </div>
+    <div class="container mt-3 respo">
+        <h5 id="title" class="mb-3" style="text-align: center;">Points Page</h5>
+        <div style="margin: auto">
+            <div class="table-header respo">
+                <div class="table-header-col col-normal">Points</div>
+                <div class="table-header-col col-wide">Prediction</div>
+                <div class="table-header-col col-normal">Offset</div>
+                <div class="table-header-col col-wide hhheader">Standings</div>
+                <div class="table-header-col col-normal pos">Position</div>
+            </div>
+            <div class="respo "style="display:flex">
+                <!-- <table class=" position">
+                    <thead>
+                    </thead>
+                    <tbody class="position">
+                        <tr><td><div class="champions-league">1</div></td></tr>
+                        <tr><td><div class="champions-league">2</div></td></tr>
+                        <tr><td><div class="champions-league">3</div></td></tr>
+                        <tr><td><div class="champions-league">4</div></td></tr>
+                        <tr><td><div class="europa-league">5</div></td></tr>
+                        <tr><td><div class="europa-league">6</div></td></tr>
+                        <tr><td><div class="normal">7</div></td></tr>
+                        <tr><td><div class="normal">8</div></td></tr>
+                        <tr><td><div class="normal">9</div></td></tr>
+                        <tr><td><div class="normal">10</div></td></tr>
+                        <tr><td><div class="normal">11</div></td></tr>
+                        <tr><td><div class="normal">12</div></td></tr>
+                        <tr><td><div class="normal">13</div></td></tr>
+                        <tr><td><div class="normal">14</div></td></tr>
+                        <tr><td><div class="normal">15</div></td></tr>
+                        <tr><td><div class="normal">16</div></td></tr>
+                        <tr><td><div class="normal">17</div></td></tr>
+                        <tr><td><div class="relegation">18</div></td></tr>
+                        <tr><td><div class="relegation">19</div></td></tr>
+                        <tr><td><div class="relegation">20</div></td></tr>
+                    </tbody>
+                </table> -->
+                
+                <table id="points">
+                    <thead>
+                        <!-- <tr><td>Offset</td></tr> -->
+                    </thead>
+                    <tbody class="position">
+                
+                    </tbody>
+                </table>
+                <table class="prediction2" style="margin-right: 10px">
+                    <thead>
+                        <!-- <tr><td>Standings</td></tr> -->
+                    </thead>
+                    <tbody id="prediction2">
+                    </tbody>
+                </table>
+                <table class="prediction" style="margin-right: 10px">
+                    <thead>
+                        <!-- <tr><td>Standings</td></tr> -->
+                    </thead>
+                    <tbody id="prediction">
+                    </tbody>
+                </table>
+                <table class="standings hhheader">
+                    <thead>
+                        <!-- <tr><td>Standings</td></tr> -->
+                    </thead>
+                    <tbody id="hello">
+                    </tbody>
+                </table>
+                <table id="position">
+                    <thead>
+                    </thead>
+                    <tbody class="position">
+                
+                    </tbody>
+                </table>
+                
+                
+                
+                
+                <!-- <table id="offset">
+                    <thead>
+                    </thead>
+                    <tbody class="position">
+                
+                    </tbody>
+                </table>
+                <table class="team" style="margin-right: 10px">
+                    <thead>
+                    </thead>
+                    <tbody id="sortable">
+                    </tbody>
+                </table> -->
+                
+            </div>
+        </div>
     </div>  
   </div>
 
@@ -313,7 +336,7 @@
         predictionList.forEach(function (team) {
             var logo = getLogo(team);
             var row = '<tr class="handle">' + '<td class="team-row">' +
-                '<div class="handle team-border" style="display: flex; height: 75px; margin-bottom:10px; width: 275px; background-color: #393E46;">' +
+                '<div class="handle team-border team-div-style" style="display: flex; height: 75px; margin-bottom:10px; background-color: #393E46;">' +
                 '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
                 '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
                 '</tr>';
@@ -337,7 +360,7 @@
         standingsList.forEach(function (team) {
             var logo = getLogo(team);
             var row = '<tr class="handle">' + '<td class="team-row">' +
-                '<div class="handle team-border" style="display: flex; height: 75px; margin-bottom:10px; width: 275px; background-color: #393E46;">' +
+                '<div class="handle team-border team-div-style" style="display: flex; height: 75px; margin-bottom:10px; background-color: #393E46;">' +
                 '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
                 '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
                 '</tr>';
@@ -468,7 +491,7 @@
             for (let i = 1; i <= 20; i++) {
                 const row = positionTable.insertRow();
                 const cell = row.insertCell();
-                cell.innerHTML = '<div class="standard" style="background-color: white; color: black; margin-right: 10px;">' + i + '</div>';
+                cell.innerHTML = '<div class="pos standard" style="background-color: white; color: black; margin-right: 10px;">' + i + '</div>';
             }
         
 
