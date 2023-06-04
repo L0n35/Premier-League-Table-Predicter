@@ -177,7 +177,7 @@ def update_points():
 
     db.session.commit()
 
-    print(points)
+    print('points', points)
     return '!SCORE UPDATED!'
 
 @app.route('/rank')
