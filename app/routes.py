@@ -164,6 +164,7 @@ def get_standings():
 @app.route('/update_points', methods=['POST','GET'])
 def update_points():
     points = request.form['points']
+    print('->', points)
 
 
 
