@@ -23,6 +23,7 @@ def home():
     if form.validate_on_submit():
           # Sets current user information
           currentUser = users.query.filter_by(email=form.email.data).first()
+          print('cu', currentUser)
           currentUserID = currentUser.get_id()
           currentUserName = currentUser.get_name()
           session['username'] = currentUserName
