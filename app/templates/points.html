@@ -342,8 +342,7 @@
   
     async function updatePoints() {
       try {
-        await updatePredictionList();
-        await updateStandings();
+        await Promise.all([updatePredictionList(), updateStandings()])
   
         standingList = [];
         $("#hello").children().each(function () {

@@ -37,7 +37,7 @@ def home():
             #    return redirect(url_for('home'))
           else:
             login_user(currentUser)
-            return redirect(url_for('predict'))
+            return redirect(url_for('dash'))
 
     return render_template('home-page.html', form=form)
 
@@ -85,7 +85,7 @@ def login():
                flash('password is incorrect')
                return redirect(url_for('login'))
           login_user(currentUser)
-          return redirect(url_for('index'))
+          return redirect(url_for('dashboard'))
     else:
         flash("unsuccessful")
     return render_template('login.html', form=form)    

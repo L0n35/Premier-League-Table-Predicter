@@ -291,7 +291,8 @@
             
             <div class="grid-container">
                 <div class="item1">leetsports!</div>
-                <div class="item2">AD</div>
+                <!-- <div class="item2">AD</div> -->
+                <div id="standings" class="item2" style="width: 225px;"><h5>2022/23 Season <Table></Table></h5></div>
                 <div class="content1" style="padding: 0px 20px">
                     <div style="margin:10px 0px; text-align: left;; font-family:Verdana, Geneva, Tahoma, sans-serif">
                         <p style="font-size: 15px; color:#5a7ce2">Make predictions about the upcoming premier league season and play against your friends!</p>
@@ -323,9 +324,55 @@
                         <p style="font-size: 10px">Stat 5</p>
                     </div>
                 </div>
-                <div class="item4">AD</div>
+                <div class="item4" style="width: 225px;">
+                    <script src="https://s3-us-west-2.amazonaws.com/kaboodle/kaboodle.js" type="text/javascript"></script>
+                </div>
                 <div class="item5">Made by L0n35 2023</div>
             </div>
         </div>            
     </body>
+    <script>
+        async function fetchData(url) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      });
+      const reply = await response.text();
+      return reply;
+    }
+
+    async function updateStandings() {
+      try {
+        const reply = await fetchData('/get_standings');
+        standings = reply.split(",");
+        standingsList = standings;
+        console.log('standos', standings);
+        count = 1;
+        standingsList.forEach(function (team) {
+          var logo = getLogo(team);
+          var row = 
+            
+            '<div class="handle team-border team-div-style" style="width: 205px; border-radius: 30px; margin: 5px 10px; display: flex; height: 30px; margin-bottom:10px; background-color: #393E46;">' +
+            '<div style="height: 30px; width: 30px; border-radius: 30px; background-color: black; padding: 5px;">' + count + '</div>' +
+            '<image class="logo-size" style="height: 20px; width: 20px; margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
+            '<p style="font-size: 10px; padding: 8px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>' + '</div>' ;
+  
+          $("#standings").append(row);
+          count++;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function getLogo(team) {
+      return "../static/images/team_logos/" + team + ".png";
+    }
+  
+
+    updateStandings();
+    console.log("foo");
+    </script>
 </html>
