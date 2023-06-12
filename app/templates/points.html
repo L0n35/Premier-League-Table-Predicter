@@ -173,7 +173,7 @@
         margin-right: 10px;
     }
 
-    @media (max-width: 550px) {
+    @media (max-width: 820px) {
         .team-div-style {
             width: 75px;
         }
@@ -213,44 +213,20 @@
 </head>
 
 <body style="background-color: #222831; color:white;">
-    <div class="container mt-3 respo">
-        <h5 id="title" class="mb-3" style="text-align: center;">Points Page</h5>
+    <div class="respo">
+        <h5 id="title" class="mb-3 mt-3" style="text-align: center;">Points Page</h5>
         <div style="margin: auto">
-            <div class="table-header respo">
-                <div class="table-header-col col-normal">Points</div>
-                <div class="table-header-col col-wide">Prediction</div>
-                <div class="table-header-col col-normal">Offset</div>
-                <div class="table-header-col col-wide hhheader">Standings</div>
-                <div class="table-header-col col-normal pos">Position</div>
-            </div>
-            <div class="respo "style="display:flex">
-                <!-- <table class=" position">
-                    <thead>
-                    </thead>
-                    <tbody class="position">
-                        <tr><td><div class="champions-league">1</div></td></tr>
-                        <tr><td><div class="champions-league">2</div></td></tr>
-                        <tr><td><div class="champions-league">3</div></td></tr>
-                        <tr><td><div class="champions-league">4</div></td></tr>
-                        <tr><td><div class="europa-league">5</div></td></tr>
-                        <tr><td><div class="europa-league">6</div></td></tr>
-                        <tr><td><div class="normal">7</div></td></tr>
-                        <tr><td><div class="normal">8</div></td></tr>
-                        <tr><td><div class="normal">9</div></td></tr>
-                        <tr><td><div class="normal">10</div></td></tr>
-                        <tr><td><div class="normal">11</div></td></tr>
-                        <tr><td><div class="normal">12</div></td></tr>
-                        <tr><td><div class="normal">13</div></td></tr>
-                        <tr><td><div class="normal">14</div></td></tr>
-                        <tr><td><div class="normal">15</div></td></tr>
-                        <tr><td><div class="normal">16</div></td></tr>
-                        <tr><td><div class="normal">17</div></td></tr>
-                        <tr><td><div class="relegation">18</div></td></tr>
-                        <tr><td><div class="relegation">19</div></td></tr>
-                        <tr><td><div class="relegation">20</div></td></tr>
-                    </tbody>
-                </table> -->
-                
+            
+            <div class="respo">
+                <div class="table-header respo" style="width: fit-content;">
+                    <div class="table-header-col col-normal">Points</div>
+                    <div class="table-header-col col-wide">Prediction</div>
+                    <div class="table-header-col col-normal">Offset</div>
+                    <div class="table-header-col col-wide hhheader">Standings</div>
+                    <div class="table-header-col col-normal pos">Position</div>
+                </div>
+            <div class="respo "style="display:flex; width: fit-content;">
+            
                 <table id="points">
                     <thead>
                         <!-- <tr><td>Offset</td></tr> -->
@@ -291,20 +267,8 @@
                 
                 
                 
-                <!-- <table id="offset">
-                    <thead>
-                    </thead>
-                    <tbody class="position">
-                
-                    </tbody>
-                </table>
-                <table class="team" style="margin-right: 10px">
-                    <thead>
-                    </thead>
-                    <tbody id="sortable">
-                    </tbody>
-                </table> -->
-                
+            
+            </div>
             </div>
         </div>
     </div>  
@@ -315,206 +279,206 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script>
 
-  var sortedData = [];
-  predictionList = [];
-  predictionList = ["Manchester City","Liverpool","Chelsea","Manchester United","Arsenal","Newcastle","Tottenham","Aston Villa","Brentford","Crystal Palace","Fulham","Brighton","Leicester","West Ham","Nottingham Forest","Leeds","Everton","Bournemouth","Southampton","Wolves"];
-
-    fetch('/get_prediction', {
+    var sortedData = [];
+    predictionList = [];
+    predictionList = ["Manchester City","Liverpool","Chelsea","Manchester United","Arsenal","Newcastle","Tottenham","Aston Villa","Brentford","Crystal Palace","Fulham","Brighton","Leicester","West Ham","Nottingham Forest","Leeds","Everton","Bournemouth","Southampton","Wolves"];
+  
+    async function fetchData(url) {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-    })
-    .then(response => response.text())
-    .then(reply => {
+      });
+      const reply = await response.text();
+      return reply;
+    }
+  
+    async function updatePredictionList() {
+      try {
+        const reply = await fetchData('/get_prediction');
         console.log(reply);
-
+  
         user_prediction = reply.split(",");
         predictionList = user_prediction;
-        console.log('baaa',user_prediction);
-
+        console.log('baaa', user_prediction);
+  
         predictionList.forEach(function (team) {
-            var logo = getLogo(team);
-            var row = '<tr class="handle">' + '<td class="team-row">' +
-                '<div class="handle team-border team-div-style" style="display: flex; height: 75px; margin-bottom:10px; background-color: #393E46;">' +
-                '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
-                '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
-                '</tr>';
-
-            $("#prediction2").append(row);
+          var logo = getLogo(team);
+          var row = '<tr class="handle">' + '<td class="team-row">' +
+            '<div class="handle team-border team-div-style" style="display: flex; height: 75px; margin-bottom:10px; background-color: #393E46;">' +
+            '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
+            '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>' + '</div>' + '</td>'
+          '</tr>';
+  
+          $("#prediction2").append(row);
         });
-    });
-    
-    fetch('/get_standings', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-    })
-    .then(response => response.text())
-    .then(reply => {
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    async function updateStandings() {
+      try {
+        const reply = await fetchData('/get_standings');
         standings = reply.split(",");
         standingsList = standings;
-        console.log('standos',standings);
-
+        console.log('standos', standings);
+  
         standingsList.forEach(function (team) {
-            var logo = getLogo(team);
-            var row = '<tr class="handle">' + '<td class="team-row">' +
-                '<div class="handle team-border team-div-style" style="display: flex; height: 75px; margin-bottom:10px; background-color: #393E46;">' +
-                '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
-                '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>'  +'</div>' + '</td>'
-                '</tr>';
-
-            $("#hello").append(row);
+          var logo = getLogo(team);
+          var row = '<tr class="handle">' + '<td class="team-row">' +
+            '<div class="handle team-border team-div-style" style="display: flex; height: 75px; margin-bottom:10px; background-color: #393E46;">' +
+            '<image class="logo-size" style="margin: 5px 10px 5px 10px;" src="' + logo + '"></image>' +
+            '<p style="padding: 23px 0px 20px 0px; margin-bottom: 0px; text-overflow: clip; overflow: hidden; ">' + team + '</p>' + '</div>' + '</td>'
+          '</tr>';
+  
+          $("#hello").append(row);
         });
-    });
-
-    function getLogo(team) {
-        return "../static/images/team_logos/" + team + ".png";
+      } catch (error) {
+        console.error(error);
+      }
     }
-    
-    setTimeout(() => {
-    $(function () { 
-            
-            standingList = [];
-            $("#hello").children().each(function () {
-                var teamName = $(this).find('.handle').text().trim();
-                standingList.push(teamName);
-            });
-            $("#sortable").children().each(function () {
-                var teamName = $(this).find('.handle').text().trim();
-                predictionList.push(teamName);
-            });
-
-            offsetList = [];
-            pointsList = [];
-            indexList = [];
-            var points = 0;
-
-            for (let i=0; i<20; i++) {
-                console.log('indoxList: ',indexList);
-                for (let x=0; x<20; x++) {
-                    console.log(i,standingList[i],x,predictionList[x],x-i)
-                    if (standingList[x] == predictionList[i]) {
-                        offsetList.push(i-x);
-                        indexList.push(x);
-                        if (Math.abs(i-x) == 0) {
-                            pointsList.push(5);
-                            points += 5;
-                        } else if (Math.abs(i-x) == 1) {
-                            pointsList.push(4);
-                            points += 4;
-                        } else if (Math.abs(i-x) == 2) {
-                            pointsList.push(3);
-                            points += 3;
-                        } else if (Math.abs(i-x) == 3) {
-                            pointsList.push(2);
-                            points += 2;
-                        } else if (Math.abs(i-x) == 4) {
-                            pointsList.push(1);
-                            points += 1;
-                        } else {
-                            pointsList.push(0);
-                        }
-                        break;
-                    }
-                }
-            }
-
-            const pointsTitle = document.getElementById('title');
-            pointsTitle.innerHTML = 'Total Points: ' + points;
-
-            console.log("standingList: ",standingList);
-            console.log("predictionList: ",predictionList);
-            console.log("offsetList: ",offsetList);
-            console.log("pointsList: ",pointsList);
-            console.log("indexList: ",indexList);
-
-            const predictionTable = document.getElementById('prediction');
-            
-            for (let i = 0; i < indexList.length; i++) {
-                const row = predictionTable.insertRow();
-                const cell = row.insertCell();
-
-                borderColour = "";
-                console.log(Math.abs(offsetList[i]));
-                if (Math.abs(offsetList[i]) == 1) {
-                    borderColour = "orange";
-                    console.log(borderColour);
-                } else {
-                    borderColour = "red";
-                }
-                
-                if (offsetList[i] > 0) {
-                    cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px 0px 15px 0px; text-align: center; font-size: x-large; border: 5px solid ' + '#393E46' + ';">' + 
-                    // (indexList[i] + 1) + 
-                    '<span class="fa fa-solid fa-arrow-up" style="font-size: x-large; margin-right: 10px;"></span>' +
-                    Math.abs(offsetList[i]) +
-                    '</div>';
-                } else if (offsetList[i] < 0) {
-                    cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px 0px 15px 0px; text-align: center; font-size: x-large; border: 5px solid ' + '#393E46' + ';">' + 
-                    // (indexList[i] + 1) + 
-                    '<span class="fa fa-solid fa-arrow-down" style="font-size: x-large; margin-right: 10px;"></span>' +
-                    Math.abs(offsetList[i]) +
-                    '</div>';
-                } else {
-                    cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px; text-align: center; font-size: x-large; border: 5px solid #393E46;">' + 
-                    '<span class="fa fa-solid fa-equals" style="font-size: x-large;"></span>' +
-                    '</div>';
-
-                }
-            
-            }
-
-            // const offsetTable = document.getElementById('offset');
-            
-            // for (let i = 0; i < offsetList.length; i++) {
-            //     const row = offsetTable.insertRow();
-            //     const cell = row.insertCell();
-            //     cell.innerHTML = '<div class="standard" style="margin-right:10px;">' + offsetList[i] + '</div>';
-            // }
-
-            const pointsTable = document.getElementById('points');
-            
-            for (let i = 0; i < pointsList.length; i++) {
-                const row = pointsTable.insertRow();
-                const cell = row.insertCell();
-                if (pointsList[i] > 0) {
-                    cell.innerHTML = '<div class="standard" style="background-color: white; color: black; margin-right: 10px;">' + pointsList[i] + '</div>';
-                } else {
-                    cell.innerHTML = '<div class="standard" style="background-color: black; margin-right: 10px;">' + '-' + '</div>';
-                }
-            }
-
-            const positionTable = document.getElementById('position');
-            
-            for (let i = 1; i <= 20; i++) {
-                const row = positionTable.insertRow();
-                const cell = row.insertCell();
-                cell.innerHTML = '<div class="pos standard" style="background-color: white; color: black; margin-right: 10px;">' + i + '</div>';
-            }
-        
-
-
-        fetch('/update_points', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `points=${encodeURIComponent(points.toString())}`
-        })
-        .then(response => response.text())
-        .then(reply => {
-            console.log(reply);
+  
+    async function updatePoints() {
+      try {
+        await updatePredictionList();
+        await updateStandings();
+  
+        standingList = [];
+        $("#hello").children().each(function () {
+          var teamName = $(this).find('.handle').text().trim();
+          standingList.push(teamName);
         });
+        $("#sortable").children().each(function () {
+          var teamName = $(this).find('.handle').text().trim();
+          predictionList.push(teamName);
+        });
+  
+        offsetList = [];
+        pointsList = [];
+        indexList = [];
+        var points = 0;
+  
+        for (let i = 0; i < 20; i++) {
+          console.log('indoxList: ', indexList);
+          for (let x = 0; x < 20; x++) {
+            console.log(i, standingList[i], x, predictionList[x], x - i)
+            if (standingList[x] == predictionList[i]) {
+              offsetList.push(i - x);
+              indexList.push(x);
+              if (Math.abs(i - x) == 0) {
+                pointsList.push(5);
+                points += 5;
+              } else if (Math.abs(i - x) == 1) {
+                pointsList.push(4);
+                points += 4;
+              } else if (Math.abs(i - x) == 2) {
+                pointsList.push(3);
+                points += 3;
+              } else if (Math.abs(i - x) == 3) {
+                pointsList.push(2);
+                points += 2;
+              } else if (Math.abs(i - x) == 4) {
+                pointsList.push(1);
+                points += 1;
+              } else {
+                pointsList.push(0);
+              }
+              break;
+            }
+          }
+        }
+  
+        const pointsTitle = document.getElementById('title');
+        pointsTitle.innerHTML = 'Total Points: ' + points;
+  
+        console.log("standingList: ", standingList);
+        console.log("predictionList: ", predictionList);
+        console.log("offsetList: ", offsetList);
+        console.log("pointsList: ", pointsList);
+        console.log("indexList: ", indexList);
+  
+        const predictionTable = document.getElementById('prediction');
+  
+        for (let i = 0; i < indexList.length; i++) {
+          const row = predictionTable.insertRow();
+          const cell = row.insertCell();
+  
+          borderColour = "";
+          console.log(Math.abs(offsetList[i]));
+          if (Math.abs(offsetList[i]) == 1) {
+            borderColour = "orange";
+            console.log(borderColour);
+          } else {
+            borderColour = "red";
+          }
+  
+          if (offsetList[i] > 0) {
+            cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px 0px 15px 0px; text-align: center; font-size: x-large; border: 5px solid ' + '#393E46' + ';">' +
+              // (indexList[i] + 1) + 
+              '<span class="fa fa-solid fa-arrow-up" style="font-size: x-large; margin-right: 10px;"></span>' +
+              Math.abs(offsetList[i]) +
+              '</div>';
+          } else if (offsetList[i] < 0) {
+            cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px 0px 15px 0px; text-align: center; font-size: x-large; border: 5px solid ' + '#393E46' + ';">' +
+              // (indexList[i] + 1) + 
+              '<span class="fa fa-solid fa-arrow-down" style="font-size: x-large; margin-right: 10px;"></span>' +
+              Math.abs(offsetList[i]) +
+              '</div>';
+          } else {
+            cell.innerHTML = '<div class="standard" style="background-color: #393E46; color: white; width: 75px; padding: 15px; text-align: center; font-size: x-large; border: 5px solid #393E46;">' +
+              '<span class="fa fa-solid fa-equals" style="font-size: x-large;"></span>' +
+              '</div>';
+  
+          }
+  
+        }
+  
+        const pointsTable = document.getElementById('points');
+  
+        for (let i = 0; i < pointsList.length; i++) {
+          const row = pointsTable.insertRow();
+          const cell = row.insertCell();
+          if (pointsList[i] > 0) {
+            cell.innerHTML = '<div class="standard" style="background-color: white; color: black; margin-right: 10px;">' + pointsList[i] + '</div>';
+          } else {
+            cell.innerHTML = '<div class="standard" style="background-color: black; margin-right: 10px;">' + '-' + '</div>';
+          }
+        }
+  
+        const positionTable = document.getElementById('position');
+  
+        for (let i = 1; i <= 20; i++) {
+          const row = positionTable.insertRow();
+          const cell = row.insertCell();
+          cell.innerHTML = '<div class="pos standard" style="background-color: white; color: black; margin-right: 10px;">' + i + '</div>';
+        }
+  
+        const response = await fetch('/update_points', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `points=${encodeURIComponent(points.toString())}`
+        });
+        const reply = await response.text();
+        console.log(reply);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    function getLogo(team) {
+      return "../static/images/team_logos/" + team + ".png";
+    }
+  
+    
+    updatePoints();
 
-
-
-
-    });
-    }, 5000);
-
+  
   </script>
+  
 </body>
 
 </html>
